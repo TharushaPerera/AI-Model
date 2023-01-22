@@ -85,16 +85,6 @@ def call(text):
 
 
 
-def say_hello(text):
-    greet = ["hi", "hey", "hola", "greetings", "wassup", "hello"]
-
-    response = ["howdy", "whats good", "hello", "hey there"]
-
-    for word in text.split():
-        if word.lower() in greet:
-            return random.choice(response) + "."
-
-    return ""
 
 
 

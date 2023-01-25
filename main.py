@@ -97,35 +97,9 @@ def note(text):
     subprocess.Popen(["notepad.exe", file_name])
 
 
-def google_calendar():
-    """Shows basic usage of the Google Calendar API.
-    Prints the start and name of the next 10 events on the user's calendar.
-    """
-    creds = None
-    if os.path.exists('token.pickle'):
-        with open('token.pickle', 'rb') as token:
-            creds = pickle.load(token)
-
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                '../../Voice Assistant/credentials.json', SCOPES)
-            creds = flow.run_local_server(port=0)
-
-        with open('token.pickle', 'wb') as token:
-            pickle.dump(creds, token)
-
-    service = build('calendar', 'v3', credentials=creds)
-
-    return service
-
-
 def calendar_events(num, service):
     talk(f'Hey there! Good Day. Hope you are doing fine. These are the events to do today')
-    # Call the Calendar API
-    now = datetime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
+    now = datetime.datetime.utcnow().isoformat() + 'Z'  
     print(f'Getting the upcoming {num} events')
     events_result = service.events().list(calendarId='primary', timeMin=now, maxResults=num, singleEvents=True,
                                           orderBy='startTime').execute()
@@ -136,11 +110,11 @@ def calendar_events(num, service):
     for event in events:
         start = event['start'].get('dateTime', event['start'].get('date'))
         events_today = (event['summary'])
-        start_time = str(start.split("T")[1].split("-")[0])  # get the hour the event starts
-        if int(start_time.split(":")[0]) < 12:  # if the event is in the morning
+        start_time = str(start.split("T")[1].split("-")[0])  
+        if int(start_time.split(":")[0]) < 12:  
             start_time = start_time + "am"
         else:
-            start_time = str(int(start_time.split(":")[0]) - 12)  # convert 24 hour time to regular
+            start_time = str(int(start_time.split(":")[0]) - 12)  
             start_time = start_time + "pm"
         talk(f'{events_today} at {start_time}')
 
@@ -155,20 +129,20 @@ except:
 
 def pizza():
     driver = webdriver.Chrome(
-        r"C:\...\chromedriver.exe"  # Location of your webdriver
+        r"C:\...\chromedriver.exe" 
     )
-    driver.maximize_window()  # Maximizes the browser window
+    driver.maximize_window()  
 
     talk("Opening Dominos")
-    driver.get('https://www.dominos.co.in/')  # Open the site
+    driver.get('https://www.dominos.co.in/') 
     sleep(2)
 
     talk("Getting ready to order")
-    driver.find_element_by_link_text('ORDER ONLINE NOW').click()  # Click on order now button
+    driver.find_element_by_link_text('ORDER ONLINE NOW').click()  
     sleep(2)
 
     talk("Finding your location")
-    driver.find_element_by_class_name('srch-cnt-srch-inpt').click()  # Click on the location search
+    driver.find_element_by_class_name('srch-cnt-srch-inpt').click()  
     sleep(2)
 
     location = ""  # Enter your location
@@ -176,7 +150,7 @@ def pizza():
     talk("Entering your location")
     driver.find_element_by_xpath(
         '//*[@id="__next"]/div/div[1]/div[2]/div/div[1]/div/div[3]/div/div[1]/div[2]/div/div[1]/input').send_keys(
-        location)  # Send text to location search input field
+        location) 
     sleep(2)
 
     driver.find_element_by_xpath(

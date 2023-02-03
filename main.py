@@ -16,17 +16,9 @@ import playsound
 import wolframalpha
 import requests
 import json
-import winshell
 import subprocess
 import ctypes
-from twilio.rest import Client
-import pickle
-import os.path
-from googleapiclient.discovery import build
-from google_auth_oauthlib.flow import InstalledAppFlow
-from google.auth.transport.requests import Request
-from selenium import webdriver
-from time import sleep
+
 
 warnings.filterwarnings("ignore")
 
@@ -72,10 +64,104 @@ def response(text):
 
 
 
+def call(text):
+    action_call = "assistant"
+
+    text = text.lower()
+
+    if action_call in text:
+        return True
+
+    return False
 
 
+def today_date():
+    now = datetime.datetime.now()
+    date_now = datetime.datetime.today()
+    week_now = calendar.day_name[date_now.weekday()]
+    month_now = now.month
+    day_now = now.day
+
+    months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+    ]
+
+    ordinals = [
+        "1st",
+        "2nd",
+        "3rd",
+        "4th",
+        "5th",
+        "6th",
+        "7th",
+        "8th",
+        "9th",
+        "10th",
+        "11th",
+        "12th",
+        "13th",
+        "14th",
+        "15th",
+        "16th",
+        "17th",
+        "18th",
+        "19th",
+        "20th",
+        "21st",
+        "22nd",
+        "23rd",
+        "24th",
+        "25th",
+        "26th",
+        "27th",
+        "28th",
+        "29th",
+        "30th",
+        "31st",
+    ]
+
+    return "Today is " + week_now + ", " + months[month_now - 1] + " the " + ordinals[day_now - 1] + "."
 
 
+def say_hello(text):
+    greet = ["hi", "hey", "hola", "greetings", "wassup", "hello"]
+
+    response = ["howdy", "whats good", "hello", "hey there"]
+
+    for word in text.split():
+        if word.lower() in greet:
+            return random.choice(response) + "."
+
+    return ""
+
+
+def wiki_person(text):
+    list_wiki = text.split()
+    for i in range(0, len(list_wiki)):
+        if i + 3 <= len(list_wiki) - 1 and list_wiki[i].lower() == "who" and list_wiki[i + 1].lower() == "is":
+            return list_wiki[i + 2] + " " + list_wiki[i + 3]
+
+
+def send_email(to, content):
+    server = smtplib.SMTP("smtp.gmail.com", 587)
+    server.ehlo()
+    server.starttls()
+
+    # Enable low security in gmail
+    server.login("email", "pass")
+    server.sendmail("email", to, content)
+    server.close()
 
 
 def note(text):
@@ -87,9 +173,35 @@ def note(text):
     subprocess.Popen(["notepad.exe", file_name])
 
 
+def google_calendar():
+    """Shows basic usage of the Google Calendar API.
+    Prints the start and name of the next 10 events on the user's calendar.
+    """
+    creds = None
+    if os.path.exists('token.pickle'):
+        with open('token.pickle', 'rb') as token:
+            creds = pickle.load(token)
+
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file(
+                '../../Voice Assistant/credentials.json', SCOPES)
+            creds = flow.run_local_server(port=0)
+
+        with open('token.pickle', 'wb') as token:
+            pickle.dump(creds, token)
+
+    service = build('calendar', 'v3', credentials=creds)
+
+    return service
+
+
 def calendar_events(num, service):
     talk(f'Hey there! Good Day. Hope you are doing fine. These are the events to do today')
-    now = datetime.datetime.utcnow().isoformat() + 'Z'  
+    # Call the Calendar API
+    now = datetime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
     print(f'Getting the upcoming {num} events')
     events_result = service.events().list(calendarId='primary', timeMin=now, maxResults=num, singleEvents=True,
                                           orderBy='startTime').execute()
@@ -100,11 +212,11 @@ def calendar_events(num, service):
     for event in events:
         start = event['start'].get('dateTime', event['start'].get('date'))
         events_today = (event['summary'])
-        start_time = str(start.split("T")[1].split("-")[0])  
-        if int(start_time.split(":")[0]) < 12:  
+        start_time = str(start.split("T")[1].split("-")[0])  # get the hour the event starts
+        if int(start_time.split(":")[0]) < 12:  # if the event is in the morning
             start_time = start_time + "am"
         else:
-            start_time = str(int(start_time.split(":")[0]) - 12)  
+            start_time = str(int(start_time.split(":")[0]) - 12)  # convert 24 hour time to regular
             start_time = start_time + "pm"
         talk(f'{events_today} at {start_time}')
 
@@ -119,20 +231,20 @@ except:
 
 def pizza():
     driver = webdriver.Chrome(
-        r"C:\...\chromedriver.exe" 
+        r"C:\...\chromedriver.exe"  # Location of your webdriver
     )
-    driver.maximize_window()  
+    driver.maximize_window()  # Maximizes the browser window
 
     talk("Opening Dominos")
-    driver.get('https://www.dominos.co.in/') 
+    driver.get('https://www.dominos.co.in/')  # Open the site
     sleep(2)
 
     talk("Getting ready to order")
-    driver.find_element_by_link_text('ORDER ONLINE NOW').click()  
+    driver.find_element_by_link_text('ORDER ONLINE NOW').click()  # Click on order now button
     sleep(2)
 
     talk("Finding your location")
-    driver.find_element_by_class_name('srch-cnt-srch-inpt').click()  
+    driver.find_element_by_class_name('srch-cnt-srch-inpt').click()  # Click on the location search
     sleep(2)
 
     location = ""  # Enter your location
@@ -140,7 +252,7 @@ def pizza():
     talk("Entering your location")
     driver.find_element_by_xpath(
         '//*[@id="__next"]/div/div[1]/div[2]/div/div[1]/div/div[3]/div/div[1]/div[2]/div/div[1]/input').send_keys(
-        location) 
+        location)  # Send text to location search input field
     sleep(2)
 
     driver.find_element_by_xpath(
@@ -574,6 +686,9 @@ while True:
             elif "order a pizza" in text or "pizza" in text:
                 pizza()
 
+
+
+            # Assistant Audio speak
             response(speak)
 
     except:

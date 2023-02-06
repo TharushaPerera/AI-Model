@@ -158,7 +158,7 @@ def send_email(to, content):
     server.ehlo()
     server.starttls()
 
-    # Enable low security in gmail
+    
     server.login("email", "pass")
     server.sendmail("email", to, content)
     server.close()
@@ -200,7 +200,7 @@ def google_calendar():
 
 def calendar_events(num, service):
     talk(f'Hey there! Good Day. Hope you are doing fine. These are the events to do today')
-    # Call the Calendar API
+    
     now = datetime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
     print(f'Getting the upcoming {num} events')
     events_result = service.events().list(calendarId='primary', timeMin=now, maxResults=num, singleEvents=True,
@@ -688,7 +688,7 @@ while True:
 
 
 
-            # Assistant Audio speak
+        
             response(speak)
 
     except:

@@ -114,53 +114,6 @@ def note(text):
     subprocess.Popen(["notepad.exe", file_name])
 
 
-def google_calendar():
-    """Shows basic usage of the Google Calendar API.
-    Prints the start and name of the next 10 events on the user's calendar.
-    """
-    creds = None
-    if os.path.exists('token.pickle'):
-        with open('token.pickle', 'rb') as token:
-            creds = pickle.load(token)
-
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                '../../Voice Assistant/credentials.json', SCOPES)
-            creds = flow.run_local_server(port=0)
-
-        with open('token.pickle', 'wb') as token:
-            pickle.dump(creds, token)
-
-    service = build('calendar', 'v3', credentials=creds)
-
-    return service
-
-
-def calendar_events(num, service):
-    talk(f'Hey there! Good Day. Hope you are doing fine. These are the events to do today')
-    
-    now = datetime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
-    print(f'Getting the upcoming {num} events')
-    events_result = service.events().list(calendarId='primary', timeMin=now, maxResults=num, singleEvents=True,
-                                          orderBy='startTime').execute()
-    events = events_result.get('items', [])
-
-    if not events:
-        talk('No upcoming events found.')
-    for event in events:
-        start = event['start'].get('dateTime', event['start'].get('date'))
-        events_today = (event['summary'])
-        start_time = str(start.split("T")[1].split("-")[0])  # get the hour the event starts
-        if int(start_time.split(":")[0]) < 12:  # if the event is in the morning
-            start_time = start_time + "am"
-        else:
-            start_time = str(int(start_time.split(":")[0]) - 12)  # convert 24 hour time to regular
-            start_time = start_time + "pm"
-        talk(f'{events_today} at {start_time}')
-
 
 try:
     service = google_calendar()

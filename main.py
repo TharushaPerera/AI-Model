@@ -18,6 +18,8 @@ import requests
 import json
 import subprocess
 import ctypes
+import gtts
+from playsound import playsound
 
 
 warnings.filterwarnings("ignore")
@@ -63,6 +65,11 @@ def response(text):
     os.remove(audio)
 
 
+# make request to google to get synthesis
+tts = gtts.gTTS("Hello world")
+
+# play the audio file
+playsound("hello.mp3")
 
 def call(text):
     action_call = "assistant"

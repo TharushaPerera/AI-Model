@@ -132,12 +132,12 @@ except:
 
 def pizza():
     driver = webdriver.Chrome(
-        r"C:\...\chromedriver.exe"  # Location of your webdriver
+        r"C:\...\chromedriver.exe"  
     )
-    driver.maximize_window()  # Maximizes the browser window
+    driver.maximize_window()  
 
     talk("Opening Dominos")
-    driver.get('https://www.dominos.co.in/')  # Open the site
+    driver.get('')  
     sleep(2)
 
     talk("Getting ready to order")
@@ -148,12 +148,12 @@ def pizza():
     driver.find_element_by_class_name('srch-cnt-srch-inpt').click()  # Click on the location search
     sleep(2)
 
-    location = ""  # Enter your location
+    location = ""  
 
     talk("Entering your location")
     driver.find_element_by_xpath(
         '//*[@id="__next"]/div/div[1]/div[2]/div/div[1]/div/div[3]/div/div[1]/div[2]/div/div[1]/input').send_keys(
-        location)  # Send text to location search input field
+        location) 
     sleep(2)
 
     driver.find_element_by_xpath(
@@ -169,7 +169,7 @@ def pizza():
         exit()
 
     talk("Logging in")
-    phone_num = ""  # Enter your phone number here
+    phone_num = ""  
 
     driver.find_element_by_xpath(
         '//*[@id="__next"]/div/div/div[1]/div[1]/div/div[3]/div[3]/div[2]/div/div[3]/div/div/div/div[2]/div/form/div[1]/div[2]/input').send_keys(
@@ -187,7 +187,7 @@ def pizza():
 
     driver.find_element_by_xpath(
         '//*[@id="__next"]/div/div/div[1]/div[1]/div/div[3]/div[3]/div[2]/div/div[3]/div/div/div/div[2]/div/div/div/div[1]/input').send_keys(
-        otp_log)  # Paste the OTP into the text field
+        otp_log)  
     sleep(2)
 
     driver.find_element_by_xpath(

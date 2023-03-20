@@ -121,15 +121,6 @@ def note(text):
     subprocess.Popen(["notepad.exe", file_name])
 
 
-
-try:
-    service = google_calendar()
-    calendar_events(10, service)
-except:
-    talk("Could not connect to the local wifi network. Please try again later.")
-    exit()
-
-
 def pizza():
     driver = webdriver.Chrome(
         r"C:\...\chromedriver.exe"  

@@ -101,24 +101,6 @@ def wiki_person(text):
             return list_wiki[i + 2] + " " + list_wiki[i + 3]
 
 
-def send_email(to, content):
-    server = smtplib.SMTP("smtp.gmail.com", 587)
-    server.ehlo()
-    server.starttls()
-
-    
-    server.login("email", "pass")
-    server.sendmail("email", to, content)
-    server.close()
-
-
-def note(text):
-    date = datetime.datetime.now()
-    file_name = str(date).replace(":", "-") + "-note.txt"
-    with open(file_name, "w") as f:
-        f.write(text)
-
-    subprocess.Popen(["notepad.exe", file_name])
 
 
 def pizza():

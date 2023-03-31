@@ -71,6 +71,7 @@ tts = gtts.gTTS("Hello world")
 # play the audio file
 playsound("hello.mp3")
 
+
 def call(text):
     action_call = "assistant"
 
@@ -101,32 +102,32 @@ def wiki_person(text):
             return list_wiki[i + 2] + " " + list_wiki[i + 3]
 
 
-
-
 def pizza():
     driver = webdriver.Chrome(
-        r"C:\...\chromedriver.exe"  
+        r"C:\...\chromedriver.exe"
     )
-    driver.maximize_window()  
+    driver.maximize_window()
 
     talk("Opening Dominos")
-    driver.get('')  
+    driver.get('')
     sleep(2)
 
     talk("Getting ready to order")
-    driver.find_element_by_link_text('ORDER ONLINE NOW').click()  # Click on order now button
+    driver.find_element_by_link_text(
+        'ORDER ONLINE NOW').click()  # Click on order now button
     sleep(2)
 
     talk("Finding your location")
-    driver.find_element_by_class_name('srch-cnt-srch-inpt').click()  # Click on the location search
+    driver.find_element_by_class_name(
+        'srch-cnt-srch-inpt').click()  # Click on the location search
     sleep(2)
 
-    location = ""  
+    location = ""
 
     talk("Entering your location")
     driver.find_element_by_xpath(
         '//*[@id="__next"]/div/div[1]/div[2]/div/div[1]/div/div[3]/div/div[1]/div[2]/div/div[1]/input').send_keys(
-        location) 
+        location)
     sleep(2)
 
     driver.find_element_by_xpath(
@@ -142,7 +143,7 @@ def pizza():
         exit()
 
     talk("Logging in")
-    phone_num = ""  
+    phone_num = ""
 
     driver.find_element_by_xpath(
         '//*[@id="__next"]/div/div/div[1]/div[1]/div/div[3]/div[3]/div[2]/div/div[3]/div/div/div/div[2]/div/form/div[1]/div[2]/input').send_keys(
@@ -160,7 +161,7 @@ def pizza():
 
     driver.find_element_by_xpath(
         '//*[@id="__next"]/div/div/div[1]/div[1]/div/div[3]/div[3]/div[2]/div/div[3]/div/div/div/div[2]/div/div/div/div[1]/input').send_keys(
-        otp_log)  
+        otp_log)
     sleep(2)
 
     driver.find_element_by_xpath(
@@ -319,7 +320,8 @@ while True:
                     minute = "0" + str(now.minute)
                 else:
                     minute = str(now.minute)
-                speak = speak + " " + "It is " + str(hour) + ":" + minute + " " + meridiem + " ."
+                speak = speak + " " + "It is " + \
+                    str(hour) + ":" + minute + " " + meridiem + " ."
 
             elif "wikipedia" in text or "Wikipedia" in text:
                 if "who is" in text:
@@ -380,7 +382,8 @@ while True:
                 talk("for how many seconds do you want me to sleep")
                 a = int(rec_audio())
                 time.sleep(a)
-                speak = speak + str(a) + " seconds completed. Now you can ask me anything"
+                speak = speak + \
+                    str(a) + " seconds completed. Now you can ask me anything"
 
             elif "change background" in text or "change wallpaper" in text:
                 img = r"E:\...\images"
@@ -560,9 +563,6 @@ while True:
             elif "order a pizza" in text or "pizza" in text:
                 pizza()
 
-
-
-        
             response(speak)
 
     except:

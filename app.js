@@ -100,13 +100,13 @@ function addToCard(key) {
 //   total.innerText = totalPrice.toLocaleString();
 //   quantity.innerText = count;
 // }
-// function changeQuantity(key, quantity) {
-//   console.log(key, quantity);
-//   if (quantity == 0) {
-//     delete listCards[key];
-//   } else {
-//     listCards[key].quantity = quantity;
-//     listCards[key].price = quantity * products[key].price;
-//   }
-//   reloadCard();
-// }
+function changeQuantity(key, quantity) {
+  console.log(key, quantity);
+  if (quantity == 0) {
+    delete listCards[key];
+  } else {
+    listCards[key].quantity = quantity;
+    listCards[key].price = quantity * products[key].price;
+  }
+  reloadCard();
+}
